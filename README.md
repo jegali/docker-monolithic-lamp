@@ -56,3 +56,19 @@ RUN apt install phpmyadmin -y
 
 ## Configuring the environment
 Under Apache, php requires a module called mysqli. This can be started via phpenmod (php enable module). To be able to use the module, the web server must be restarted once.<br/>
+
+```bash
+# Setting the php mysqli mod for apache
+
+RUN phpenmod mysqli
+RUN service apache2 restart
+```
+
+## Adjusting the phpMyAdmin path
+I would like to link phpMyAdmin into the website directory to be able to append phpMyAdmin to the webserver URL. So if the address is http://domain.com, phpMyAdmin should be reachable via http://domain.com/phpmyadmin. To ensure this, a link command must be executed:
+
+```bash
+# link the phpmyadmin directory
+
+RUN ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+```
