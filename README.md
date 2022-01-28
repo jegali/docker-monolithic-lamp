@@ -180,5 +180,5 @@ docker run -it jegali/mallowz-one bash
 The next command starts the container and redirects the exposed port 80 to the port 9900. So, if you use a webbrowser, you should use port 9900 to acces the image.
 
 ```bash
-docker run -it jegali/mallowz-one bash
+docker run -p 9900:80 jegali/mallowz-one
 ```
