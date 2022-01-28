@@ -72,3 +72,30 @@ I would like to link phpMyAdmin into the website directory to be able to append 
 
 RUN ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
 ```
+
+## Additional components
+Now I would like to install curl, python, ifconfig and ping. However, this is mainly because I want to point out during pentesting how dangerous it is not to remove commands from a standard installation to harden the image. Furthermore, I would like to exploit a Python vulnerability to illustrate the approach with metasploit and meterpreter.
+
+```bash
+RUN apt install curl -y
+RUN apt install python -y
+RUN apt install net-tools -y
+RUN apt install iputils-ping 
+```
+
+## mariaDB konfigurieren
+I want to create a user via mysql for phpmyadmin and using the webshop. For this I will set the default password for the root-user to root to be able to access mysql comfortably. Furthermore I want to fill the database for the webshop with life via a SQL script. For this the database must be copied into the image.
+
+```bash
+# stuff for mysql / mariadb
+# set the root password
+
+ENV MYSQL_ROOT_PASSWORD root
+
+# Copy the mallowz script to the container# it will be executed in the run-mallowz shell script
+
+COPY mallowz.sql /var/www/html
+```
+
+## Installing the webshop
+In my microservice example (to be found: [here](https://github.com/jegali/docker-nginx-mysql-php-phpmyadmin)), I included the webshop as a volume. For the training purpose, I think it is better to bundle all files in a single container. Therefore, all files for the web store are copied to the default web page directory. The copy command from the Dockerfile handles recursive copying. This can be used to copy an entire directory including all subdirectories, which is very helpful in this case.
