@@ -162,3 +162,23 @@ mysql -u root < /var/www/html/mallowz.sql
 &>/dev/null /usr/sbin/apachectl -DFOREGROUND -k start
 ```
 
+## building the docker image
+Of course, in order to use the image, it still needs to be built. It is important that docker is installed and that there is a docker file in the current directory. To build the image, use this command, where jegali is my user (you should change to your user) and mallowz-one the image name. The parameter -t is used to tag the image.
+
+```bash
+docker build -t jegali/mallowz-one .
+``
+
+## logging in to the docker image
+To inspect the image with a shell, you can issue this command:
+
+```bash
+docker run -it jegali/mallowz-one bash
+```
+
+## starting the image and exposing ports
+The next command starts the container and redirects the exposed port 80 to the port 9900. So, if you use a webbrowser, you should use port 9900 to acces the image.
+
+```bash
+docker run -it jegali/mallowz-one bash
+```
