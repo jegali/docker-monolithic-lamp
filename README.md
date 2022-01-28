@@ -99,3 +99,66 @@ COPY mallowz.sql /var/www/html
 
 ## Installing the webshop
 In my microservice example (to be found: [here](https://github.com/jegali/docker-nginx-mysql-php-phpmyadmin)), I included the webshop as a volume. For the training purpose, I think it is better to bundle all files in a single container. Therefore, all files for the web store are copied to the default web page directory. The copy command from the Dockerfile handles recursive copying. This can be used to copy an entire directory including all subdirectories, which is very helpful in this case.
+
+```bash
+# This command copies the whole directory recursive - great
+
+COPY ./web /var/www/html
+
+# I don't want the index.html to be the start page, so I remove it
+
+RUN rm /var/www/html/index.html
+```
+
+## copying a startup skript
+We will still need a startup script to start the database service, create the user, run the SQL script and start apache. We will do all this via a shell script that we will call at the end of the Dockerfile and make it run. Here we already copy the script into the container in the directory /usr/sbin
+
+```bash
+# I need a startup script for the container
+# This will be copied here and started as last command
+
+COPY run-mallowz.sh /usr/sbin/
+```
+
+## exposing container ports
+The ports of the installed services must still be released so that they can be accessed from outside the container. If this is not done, the web page cannot be accessed.
+
+```bash
+# Expose port for webserver and port for mysql
+
+expose 80
+expose 3306
+```
+
+## Starting up the script
+Finally, the config script must be started. This is done via the CMD command.
+
+```bash
+CMD ["/usr/sbin/run-mallowz.sh"]
+```
+
+## the config-skript
+The config script contains the commands that I could not place in the Dockerfile. It is named run-mallowz.sh and is copied to the /usr/sbin directory.
+
+```bash
+#!/bin/bash
+
+# run mySQL / mariaDB
+service mysql start
+
+# create the database
+mysql -u root -e "CREATE DATABASE mallowz;"
+
+# create the user mallowz with password mallowz
+
+mysql -u root -e "CREATE USER 'mallowz'@'localhost' IDENTIFIED BY 'mallowz';"
+mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'mallowz'@'localhost';"
+mysql -u root -e "FLUSH PRIVILEGES;"
+
+# execute the database script and populate the database
+mysql -u root < /var/www/html/mallowz.sql
+
+# run apache
+&>/dev/null /usr/sbin/apachectl -DFOREGROUND -k start
+```
+
