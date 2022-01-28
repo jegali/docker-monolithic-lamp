@@ -44,3 +44,15 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt install apache2 libapache2-mod-php php php-mysql mariadb-server mariadb-client -y
 ```
+
+## Install phpMyAdmin
+It is very convenient to be able to administer the database through a graphical user interface. Therefore, we additionally install phpMyAdmin. Since the image will also be used for training purposes and it is useful to be able to test SQL statements before it is to be used for injection, the installation of phpMyAdmin makes sense. The installation is done with one command:
+
+```bash
+# Now installing phpmyadmin
+
+RUN apt install phpmyadmin -y
+```
+
+## Configuring the environment
+Under Apache, php requires a module called mysqli. This can be started via phpenmod (php enable module). To be able to use the module, the web server must be restarted once.<br/>
