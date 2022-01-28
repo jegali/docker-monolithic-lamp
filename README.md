@@ -24,6 +24,7 @@ The image used should be updated to the latest version. To do this, all patches 
 
 ```bash
 # Update system to latest release
+
 RUN apt update --fix-missing
 RUN apt upgrade -y
 ```
@@ -36,7 +37,10 @@ Apache expects user input during installation. This will interrupt the automatic
 ```bash
 # Apache install expects user input to set the geographic region
 # This is not so good when building the docker image so I disabled it
+
 ARG DEBIAN_FRONTEND=noninteractive
+
 # Install apache webserver
+
 RUN apt install apache2 libapache2-mod-php php php-mysql mariadb-server mariadb-client -y
 ```
