@@ -83,7 +83,7 @@ RUN apt install net-tools -y
 RUN apt install iputils-ping 
 ```
 
-## mariaDB konfigurieren
+## configuring mariaDB
 I want to create a user via mysql for phpmyadmin and using the webshop. For this I will set the default password for the root-user to root to be able to access mysql comfortably. Furthermore I want to fill the database for the webshop with life via a SQL script. For this the database must be copied into the image.
 
 ```bash
