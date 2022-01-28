@@ -20,10 +20,23 @@ MAINTAINER jegali
 ```
 
 ## Update the image to the latest version 
-The image used should be updated to the latest version. To do this, all patches that have been made available since the image was created or released will be applied. To do this, add these lines to the Dockerfile:
+The image used should be updated to the latest version. To do this, all patches that have been made available since the image was created or released will be applied. At the console we would now type "apt update" or "sudo apt update". If this command is to be executed by Docker during the creation of the image, the command line can be used as usual, it just needs to be preceded by the command RUN. Add these lines to the Dockerfile:
 
 ```bash
 # Update system to latest release
 RUN apt update --fix-missing
 RUN apt upgrade -y
+```
+
+## Install apache, php and mariadb
+Now we add the necessary components to the image one by one. we start with the absolutely necessary basic components: apache as web server, php as scripting engine and maria db as database management system.<br/>
+
+Apache expects user input during installation. This will interrupt the automatic installation of the Docker image. To bypass this user interaction, the environment variable DEBIAN_FRONTEND is set. To prevent further possible input of the form Y/N/Cancel, the -y parameter is added to the command line.
+
+```bash
+# Apache install expects user input to set the geographic region
+# This is not so good when building the docker image so I disabled it
+ARG DEBIAN_FRONTEND=noninteractive
+# Install apache webserver
+RUN apt install apache2 libapache2-mod-php php php-mysql mariadb-server mariadb-client -y
 ```
