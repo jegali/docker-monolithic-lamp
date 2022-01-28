@@ -40,7 +40,7 @@ Apache expects user input during installation. This will interrupt the automatic
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Install apache webserver
+# Install apache webserver, php and mariadb as well as needed libs/components
 
 RUN apt install apache2 libapache2-mod-php php php-mysql mariadb-server mariadb-client -y
 ```
