@@ -167,7 +167,7 @@ Of course, in order to use the image, it still needs to be built. It is importan
 
 ```bash
 docker build -t jegali/mallowz-one .
-``
+```
 
 ## logging in to the docker image
 To inspect the image with a shell, you can issue this command:
